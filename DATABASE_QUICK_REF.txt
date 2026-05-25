@@ -1,0 +1,100 @@
+╔══════════════════════════════════════════════════════════════════════╗
+║                 DATABASE QUICK REFERENCE CARD                        ║
+║              SpringBootCrud - H2 Database Access                     ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ METHOD 1: H2 WEB CONSOLE (EASIEST) ⭐                                │
+├──────────────────────────────────────────────────────────────────────┤
+│ URL:          http://localhost:8080/h2-console                       │
+│ JDBC URL:     jdbc:h2:file:./data/contactsdb                         │
+│ Username:     sa                                                      │
+│ Password:     password                                                │
+│                                                                       │
+│ Then run:     SELECT * FROM CONTACTS;                                │
+└──────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ METHOD 2: REST API (IN BROWSER)                                      │
+├──────────────────────────────────────────────────────────────────────┤
+│ View all:     http://localhost:8080/api/contacts                     │
+│ View one:     http://localhost:8080/api/contacts/1                   │
+└──────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ METHOD 3: POWERSHELL SCRIPT                                          │
+├──────────────────────────────────────────────────────────────────────┤
+│ Run:          .\view-database.ps1                                    │
+│ Location:     C:\Users\pccre\OneDrive\Documents\TestPy\              │
+│               SpringBootCrud\view-database.ps1                        │
+└──────────────────────────────────────────────────────────────────────┘
+
+┌──────────────────────────────────────────────────────────────────────┐
+│ METHOD 4: REACT FRONTEND                                             │
+├──────────────────────────────────────────────────────────────────────┤
+│ URL:          http://localhost:5173                                  │
+│ Navigate:     Click "Contacts" in navigation menu                    │
+└──────────────────────────────────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CURRENT DATABASE STATUS:
+  📊 Total Contacts:  2
+  📁 Database File:   C:\Users\pccre\OneDrive\Documents\TestPy\
+                      SpringBootCrud\data\contactsdb.mv.db
+  ✅ Backend Status:  Running on port 8080
+  ✅ Frontend Status: Running on port 5173
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+USEFUL SQL QUERIES (in H2 Console):
+
+  • View all contacts:
+    SELECT * FROM CONTACTS;
+
+  • Count contacts:
+    SELECT COUNT(*) FROM CONTACTS;
+
+  • Search by name:
+    SELECT * FROM CONTACTS WHERE NAME LIKE '%John%';
+
+  • Show table structure:
+    SHOW COLUMNS FROM CONTACTS;
+
+  • Export all data:
+    SELECT * FROM CONTACTS ORDER BY ID;
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+POWERSHELL ONE-LINERS:
+
+  • Quick view:
+    (Invoke-WebRequest http://localhost:8080/api/contacts -UseBasicParsing).Content | ConvertFrom-Json
+
+  • Pretty table:
+    (Invoke-WebRequest http://localhost:8080/api/contacts -UseBasicParsing).Content | ConvertFrom-Json | Format-Table
+
+  • Get specific contact:
+    (Invoke-WebRequest http://localhost:8080/api/contacts/1 -UseBasicParsing).Content | ConvertFrom-Json
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TABLE SCHEMA:
+
+  CONTACTS
+  ├── ID       BIGINT (Primary Key, Auto-Increment)
+  ├── NAME     VARCHAR(255) NOT NULL
+  ├── EMAIL    VARCHAR(255) NOT NULL
+  └── PHONE    VARCHAR(255)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DOCUMENTATION FILES:
+  📖 Full Guide:        DATABASE_VIEWING_GUIDE.md
+  🛠️  Lock Issues:       DATABASE_LOCK_FIX.md
+  👥 Agent Reference:   AGENTS.md
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Last Updated: May 12, 2026 - 7:46 AM
+
