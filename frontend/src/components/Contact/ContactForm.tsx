@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { Contact } from '../../types';
 import { contactApi } from '../../services/contactApi';
+import { formatPhoneNumber, isValidPhoneNumber } from '../../utils/phone';
 import './ContactForm.css';
 
 export const ContactForm = () => {
@@ -16,6 +17,7 @@ export const ContactForm = () => {
   const [loading, setLoading] = useState(!!id);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -27,11 +29,13 @@ export const ContactForm = () => {
     try {
       setLoading(true);
       const contact = await contactApi.getById(Number(id));
+      const formattedPhone = formatPhoneNumber(contact.phone || '');
       setFormData({
         name: contact.name,
         email: contact.email,
-        phone: contact.phone || ''
+        phone: formattedPhone
       });
+      setPhoneError(isValidPhoneNumber(formattedPhone) ? null : 'Use format: (123) 456-7890');
       setError(null);
     } catch {
       setError('Failed to load contact');
@@ -42,6 +46,14 @@ export const ContactForm = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    if (name === 'phone') {
+      const formatted = formatPhoneNumber(value);
+      setFormData(prev => ({ ...prev, phone: formatted }));
+      setPhoneError(isValidPhoneNumber(formatted) ? null : 'Use format: (123) 456-7890');
+      return;
+    }
+
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -55,6 +67,14 @@ export const ContactForm = () => {
     try {
       setSubmitting(true);
       setError(null);
+
+      if (!isValidPhoneNumber(formData.phone || '')) {
+        setPhoneError('Use format: (123) 456-7890');
+        return;
+      }
+
+      setPhoneError(null);
+
       if (id) {
         await contactApi.update(Number(id), formData);
       } else {
@@ -107,8 +127,11 @@ export const ContactForm = () => {
             type="tel"
             value={formData.phone}
             onChange={handleChange}
-            placeholder="Enter contact phone (optional)"
+            placeholder="(123) 456-7890"
+            pattern="^\(\d{3}\) \d{3}-\d{4}$"
+            title="Phone must be in format (123) 456-7890"
           />
+          {phoneError && <div className="error">{phoneError}</div>}
         </div>
         <div className="form-actions">
           <button type="submit" disabled={submitting} className="btn-submit">

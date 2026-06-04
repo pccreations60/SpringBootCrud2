@@ -64,7 +64,11 @@ export const ContactList = () => {
                 <tr key={contact.id}>
                   <td>{contact.id}</td>
                   <td>{contact.name}</td>
-                  <td>{contact.email}</td>
+                  <td>
+                    <a href={`mailto:${contact.email}`} className="email-link">
+                      {contact.email}
+                    </a>
+                  </td>
                   <td>{contact.phone || '-'}</td>
                   <td className="actions">
                     <button
